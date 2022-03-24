@@ -112,16 +112,13 @@ class Solution
         q.push({root,0});
         
         while(!q.empty()){
-            int size = q.size();
-            while(size--){
-                Node* u = q.front().first;
-                int dist = q.front().second;
-                q.pop();
+            Node* u = q.front().first;
+            int dist = q.front().second;
+            q.pop();
                 
-                mp[dist].push_back(u->data);
-                if(u->left) q.push({u->left, dist-1});
-                if(u->right) q.push({u->right, dist+1});
-            }
+            mp[dist].push_back(u->data);
+            if(u->left) q.push({u->left, dist-1});
+            if(u->right) q.push({u->right, dist+1});
         }
         for(auto it:mp){
             res.push_back(it.second[0]);
