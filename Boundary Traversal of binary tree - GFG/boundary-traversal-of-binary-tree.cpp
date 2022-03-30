@@ -106,41 +106,39 @@ struct Node
 class Solution {
 public:
 
-   void left_border(Node* root, vector<int>&res){
+    void left_boundry(Node* root, vector<int>& res){
         if(!root) return;
         if(root->left || root->right) res.push_back(root->data);
-        
-        if(root->left) left_border(root->left,res);
-        else if(root->right) left_border(root->right,res);
+        if(root->left) left_boundry(root->left,res);
+        else if(root->right) left_boundry(root->right,res);
     }
-    
-    void find_leaves(Node* root, vector<int>&res){
+
+    void leaves(Node* root, vector<int>& res){
         if(!root) return;
-        find_leaves(root->left,res);
+        leaves(root->left, res);
         if(!root->left && !root->right) res.push_back(root->data);
-        find_leaves(root->right,res);
+        leaves(root->right, res);
     }
     
-    void right_border(Node* root, vector<int>&res){
+    void right_boundry(Node* root, vector<int>& res){
         if(!root) return;
-        
-        if(root->right) right_border(root->right,res);
-        else if(root->left) right_border(root->left,res);
+        if(root->right) right_boundry(root->right, res);
+        else if(root->left) right_boundry(root->left, res);
         if(root->left || root->right) res.push_back(root->data);
     }
     
     vector <int> boundary(Node *root)
     {
+        //Your code here
         vector<int>res;
         if(!root) return res;
         res.push_back(root->data);
         
         if(!root->left && !root->right) return res;
+        left_boundry(root->left, res);
+        leaves(root,res);
+        right_boundry(root->right,res);
         
-        left_border(root->left,res);
-        find_leaves(root,res);
-        right_border(root->right,res);
-    
         return res;
     }
 };
