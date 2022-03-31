@@ -98,7 +98,6 @@ class Solution
                 flag = true;
                 return;
             }
-            curr_sum = 0;
         }
         curr_sum += root->data;
         solve(root->left, S, curr_sum, flag);
