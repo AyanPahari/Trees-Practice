@@ -12,25 +12,23 @@
 class Solution {
 public:
     
-    void find(TreeNode* root, int count, int targetSum, int &counter, int curr_sum){
+    void find(TreeNode* root, int count, int targetSum, int &counter, long long curr_sum){
         if(!root) return;
         curr_sum += root->val;
-        
         if(targetSum == curr_sum){
             counter++;
         }
-        
         find(root->left, count, targetSum,counter, curr_sum);
         find(root->right, count, targetSum,counter, curr_sum);
     }
     
     void solve(TreeNode* root, int& count, int targetSum){
         if(!root) return;
+        
         bool flag = false;
-        vector<vector<int>>res;
-        vector<int>output;
         int counter = 0;
-        find(root,count, targetSum, counter, 0);
+        long long curr_sum = 0;
+        find(root,count, targetSum, counter, curr_sum);
         count+=counter;
         
         solve(root->left, count, targetSum);
