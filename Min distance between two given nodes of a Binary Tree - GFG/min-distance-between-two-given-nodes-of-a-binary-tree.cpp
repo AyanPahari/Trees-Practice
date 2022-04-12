@@ -97,76 +97,36 @@ class Solution{
     public:
     /* Should return minimum distance between a and b
     in a tree with given root*/
-    Node* src = NULL;
-    void get_parent(Node* root, unordered_map<Node*,Node*>& parent){
-        queue<Node*>q;
-        q.push(root);
+    
+    Node* get_lcs(Node* root, int a, int b){
+        if(!root) return NULL;
+        if(root->data == a || root->data == b) return root;
+        Node* left = get_lcs(root->left, a, b);
+        Node* right = get_lcs(root->right, a, b);
         
-        while(!q.empty()){
-            Node* u = q.front();
-            q.pop();
-            
-            if(u->left){
-                parent[u->left] = u;
-                q.push(u->left);
-            }
-            if(u->right){
-                parent[u->right] = u;
-                q.push(u->right);
-            }
-        }
+        if(!left) return right;
+        else if(!right) return left;
+        else return root;
     }
     
-    void get_src(Node* root, int a){
+    void get_height(Node* root, int& height, int k, int dist){
         if(!root) return;
-        if(root->data == a){
-            src = root;
+        if(root->data == k){
+            height = dist;
             return;
         }
-        get_src(root->left, a);
-        get_src(root->right, a);
+        get_height(root->left, height, k, dist+1);
+        get_height(root->right, height, k, dist+1);
     }
     
     int findDist(Node* root, int a, int b) {
         // Your code here
-        unordered_map<Node*, Node*>parent;
-        get_parent(root, parent);
-        get_src(root,a);
-        queue<Node*>q;
-        q.push(src);
-        unordered_map<Node*, bool>vis;
-        vis[src] = true;
-        int dist = -1;
-        bool flag = false;
+        Node* lcs = get_lcs(root, a, b);
+        int height1,height2;
+        get_height(lcs, height1, a, 0);
+        get_height(lcs, height2, b, 0);
         
-        while(!q.empty()){
-            int size = q.size();
-            while(size--){
-                Node* u = q.front();
-                q.pop();
-                
-                if(u->data == b){
-                    flag = true;
-                    break;
-                }
-                
-                if(parent[u] && !vis[parent[u]]){
-                    q.push(parent[u]);
-                    vis[parent[u]] = true;
-                }
-                if(u->left && !vis[u->left]){
-                    q.push(u->left);
-                    vis[u->left] = true;
-                }
-                if(u->right && !vis[u->right]){
-                    q.push(u->right);
-                    vis[u->right] = true;
-                }
-            }
-            dist++;
-            if(flag) break;
-        }
-        return dist;
+        return height1 + height2;
     }
 };
 
